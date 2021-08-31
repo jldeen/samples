@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "processor.fullname" . }}
+  labels:
+    app: {{ template "processor.name" . }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicas}}
+  selector:
+    matchLabels:
+      app: {{ template "processor.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "processor.name" . }}
+        release: {{ .Release.Name }}
+        demo: {{ .Values.demoName }}
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/config: "tracing"
+        dapr.io/app-id: {{ template "processor.name" . }}
+        dapr.io/app-port: {{ .Values.port | quote }}
+        dapr.io/log-as-json: "true"
+    spec:
+      containers:
+      - name: processor
+        image: {{ .Values.image }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.port }}
+        env:
+        - name: PORT
+          value: {{ .Values.port | quote }}
+        - name: DAPR_HTTP_PORT
+          value: {{ .Values.dapr.port | quote}}
+        - name: SECRET_STORE
+          value: "kubernetes"
+        - name: SECRET_KEY
+          value: "demo-processor-secret"
+        - name: CS_ENDPOINT
+          value: {{ .Values.cognitiveService.endpoint | quote }}
+        - name: CS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: demo-processor-secret
+              key: token

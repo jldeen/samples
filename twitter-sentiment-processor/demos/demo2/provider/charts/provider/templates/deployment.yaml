@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "provider.fullname" . }}
+  labels:
+    app: {{ template "provider.name" . }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount}}
+  selector:
+    matchLabels:
+      app: {{ template "provider.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "provider.name" . }}
+        release: {{ .Release.Name }}
+        demo: {{ .Values.demoName }}
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/config: "tracing"
+        dapr.io/app-id: {{ template "provider.name" . }}
+        dapr.io/app-port: {{ .Values.port | quote }}
+        dapr.io/log-as-json: "true"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: {{ .Values.image }}
+        imagePullPolicy: Always
+        ports:
+        - containerPort: {{ .Values.port }}
+        env:
+        - name: PORT
+          value: {{ .Values.port | quote }}
+        - name: DAPR_HTTP_PORT
+          value: {{ .Values.dapr.port | quote}}

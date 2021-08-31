@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "zipkin.name" . }}-public
+  labels:
+    app: {{ template "zipkin.name" . }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+  - port: {{ .Values.externalPort }}
+    protocol: TCP
+    targetPort: 9411
+  selector:
+    app: {{ template "zipkin.name" . }}
+    release: {{ .Release.Name }}
+  type: LoadBalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "zipkin.name" . }}
+  labels:
+    app: {{ template "zipkin.name" . }}
+    release: {{ .Release.Name }}
+spec:
+  ports:
+  - port: 9411
+    protocol: TCP
+    targetPort: 9411
+  selector:
+    app: {{ template "zipkin.name" . }}
+    release: {{ .Release.Name }}
+  type: ClusterIP
