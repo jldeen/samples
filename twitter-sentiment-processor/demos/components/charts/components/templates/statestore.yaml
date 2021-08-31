@@ -2,6 +2,7 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: tweet-store
+  namespace: {{ .Release.Namespace }}
 spec:
   type: state.azure.tablestorage
   version: v1

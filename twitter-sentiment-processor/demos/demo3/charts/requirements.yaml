@@ -1,0 +1,17 @@
+dependencies:
+  - name: components
+    version: 0.1.0
+    repository: "file://../../components/charts/components"
+  - name: viewer
+    version: 0.1.0
+    repository: "file://../../demo2/viewer/charts/viewer"
+  - name: zipkin
+    version: 0.1.0
+    repository: "file://../../demo2/zipkin/charts/zipkin"
+  - name: provider
+    version: 0.1.0
+    repository: "file://../../demo2/provider/charts/provider"
+  - name: processor
+    version: 0.1.0
+    repository: "file://../../demo2/processor/charts/processor"
+  

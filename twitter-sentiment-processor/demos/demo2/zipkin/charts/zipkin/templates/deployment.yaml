@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "zipkin.fullname" . }}
+  labels:
+    app: {{ template "zipkin.name" . }}
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicas}}
+  selector:
+    matchLabels:
+      app: {{ template "zipkin.name" . }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "zipkin.name" . }}
+        release: {{ .Release.Name }}
+        demo: {{ .Values.demoName }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: openzipkin/zipkin

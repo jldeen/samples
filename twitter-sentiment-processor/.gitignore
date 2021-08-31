@@ -13,3 +13,6 @@ demos/demo1/producer/obj/Producer.csproj.nuget.dgspec.json
 demos/demo1/producer/obj/project.assets.json
 demos/demo1/producer/obj/project.nuget.cache
 demos/demo1/producer/obj/Debug/netcoreapp3.1/Producer.csprojAssemblyReference.cache
+demos/demo3/auth.json
+
+demos/components/twitter.yaml

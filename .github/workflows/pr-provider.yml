@@ -1,0 +1,149 @@
+name: PRFlow Twitter Sentiment
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - twitter-sentiment-processor/demos/demo2/**
+  workflow_dispatch:
+
+env:
+  # The name of the resource group to be created. All resources will be place
+  # in the resource group and start with name.
+  RG_NAME: "twitterDemo"
+
+  # The location to store the meta data for the deployment.
+  LOCATION: "eastus"
+
+  #The version of the dapr runtime version to deploy.
+  DAPR_VERSION: "1.3.0"
+
+  # The version of k8s control plane.
+  K8S_VERSION: "1.21.2"
+  
+jobs:
+  buildImage:
+    name: build provider image
+    runs-on: ubuntu-latest
+    steps:
+    # checkout branch
+    - name: checkout main branch
+      uses: actions/checkout@v2
+
+    # log into Azure
+    - name: "Login via Azure CLI"
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    # Bicep
+    - name: Deploy infrastructure
+      id: azure-deployment
+      shell: pwsh
+      run: |
+        $deployment = $(az deployment sub create --name ${{ env.RG_NAME }} `
+          --location ${{ env.LOCATION }} `
+          --template-file ./iac/main.bicep `
+          --parameters location=${{ env.LOCATION }} `
+          --parameters rgName=${{ env.RG_NAME }} `
+          --parameters k8sversion=${{ env.K8S_VERSION }} `
+          --output json) | ConvertFrom-Json
+        # Get all the outputs
+        Write-Output "::set-output name=aksName::$($deployment.properties.outputs.aksName.value)"
+        Write-Output "::set-output name=storageAccountKey::$($deployment.properties.outputs.storageAccountKey.value)"
+        Write-Output "::set-output name=serviceBusEndpoint::$($deployment.properties.outputs.serviceBusEndpoint.value)"
+        Write-Output "::set-output name=storageAccountName::$($deployment.properties.outputs.storageAccountName.value)"
+        Write-Output "::set-output name=cognitiveServiceKey::$($deployment.properties.outputs.cognitiveServiceKey.value)"
+        Write-Output "::set-output name=cognitiveServiceEndpoint::$($deployment.properties.outputs.cognitiveServiceEndpoint.value)"
+      working-directory: ./twitter-sentiment-processor/demos/demo3
+
+    # Setup Dapr
+    - name: Install Dapr
+      uses: dapr/setup-dapr@v1
+
+    # dapr init
+    - name: Initialize Dapr
+      shell: pwsh
+      run: |
+        Write-Host "${{ steps.azure-deployment.outputs.aksName }}"
+        # Get the credentials to use with dapr init and helm install
+        az aks get-credentials --resource-group ${{ env.RG_NAME }} --name "${{ steps.azure-deployment.outputs.aksName }}"
+        # Initialize Dapr
+        # Dapr init is very noisy in the logs so group these lines so
+        # it can be collapsed.
+        Write-Output "::group::Initialize Dapr"
+        dapr init --kubernetes --wait --runtime-version ${{ env.DAPR_VERSION }}
+        Write-Output "::endgroup::"
+        dapr status --kubernetes
+      working-directory: ./twitter-sentiment-processor/demos/demo3
+    
+    - name: "docker login"
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.CONTAINER_REGISTRY }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+
+    - name: Build and push
+      id: docker_build
+      uses: docker/build-push-action@v2
+      with:
+        push: true
+        tags: ${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }}
+        context: ./twitter-sentiment-processor/demos/demo2/provider/
+    
+    - name: Get Dev K8s Context
+      uses: azure/aks-set-context@v1
+      with:
+        creds: "${{ secrets.AZURE_CREDENTIALS }}"
+        cluster-name: ${{ steps.azure-deployment.outputs.aksName }}
+        resource-group: ${{ env.RG_NAME }}
+    
+    - name: Create valid namespace name
+      id: generate-valid-namespace-name
+      run: |
+        namespaceName=${GITHUB_HEAD_REF::63}        
+        namespaceName=$(echo ${namespaceName//[!0-9a-zA-Z]/-} | tr '[:upper:]' '[:lower:]' | sed -e 's/^-/z/' -e 's/-$/z/')
+        echo ::set-output name=result::$namespaceName
+    
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: '3.6.3'
+      id: install
+
+    - name: Helm Install PR
+      run: |
+        CHARTDIR="./charts/"
+        echo "---"
+        echo "Chart directory: $CHARTDIR"
+        
+        helm dependency update "$CHARTDIR"
+
+        helm upgrade \
+          --install twitter-kubecon "$CHARTDIR" \
+          --namespace twitter-kubecon --create-namespace \
+          --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
+          --set viewer.image=${{ secrets.CONTAINER_REGISTRY }}/viewer:1.0.0 \
+          --set viewer.ingress.hosts={twitter-kubecon.viewer.40.88.250.252.nip.io} \
+          --set zipkin.ingress.hosts={twitter-kubecon.zipkin.40.88.250.252.nip.io} \
+          --set processor.cognitiveService.token=${{ steps.azure-deployment.outputs.cognitiveServiceKey }} \
+          --set components.twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
+          --set components.twitter.consumerSecret=${{ secrets.TWITTER_CONSUMERSECRET }} \
+          --set components.twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
+          --set components.twitter.accessSecret=${{ secrets.TWITTER_ACCESSSECRET }} \
+          --set components.serviceBus.connectionString="${{ steps.azure-deployment.outputs.serviceBusEndpoint }}" \
+          --set components.tableStorage.key="${{ steps.azure-deployment.outputs.storageAccountKey }}" \
+          --set components.tableStorage.name="${{ steps.azure-deployment.outputs.storageAccountName }}" \
+          --set components.tracing.zipkin.endpointAddress="http://zipkin.twitter-kubecon.svc.cluster.local:9411/api/v2/spans" \
+          --set processor.cognitiveService.endpoint="${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }}" \
+          --set fullnameOverride=provider-pr
+      working-directory: ./twitter-sentiment-processor/demos/demo3
+
+    - uses: microsoft/mindaro/actions/add-review-url@Releases/v1              
+      with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}  
+          branch-name: ${{steps.generate-valid-namespace-name.outputs.result}}
+          host: "viewer.${{ secrets.HOST }}" ## TODO see if we can not hard code ingress.hosts
+          protocol: "http"

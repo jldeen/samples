@@ -17,4 +17,3 @@ spec:
     value: {{ .Values.twitter.accessSecret }}
   - name: query
     value: "microsoft"
-    

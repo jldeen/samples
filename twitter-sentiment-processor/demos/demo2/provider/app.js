@@ -69,6 +69,7 @@ app.post("/tweets", (req, res) => {
     return;
   }
 
+  
   let obj = {
     id: tweet.id_str,
     author: tweet.user.screen_name,
@@ -78,6 +79,7 @@ app.post("/tweets", (req, res) => {
     published: tweet.created_at,
     trace_state: req.get("tracestate"),
     trace_parent: req.get("traceparent"),
+    route_header: req.get("kubernetes-route-as"),
     sentiment: 0.5, // default to neutral sentiment
   };
 
