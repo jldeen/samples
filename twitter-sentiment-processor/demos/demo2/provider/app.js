@@ -61,7 +61,7 @@ var saveContent = function (obj) {
 };
 
 // tweets handler
-app.post("/tweets", (req, res) => {
+app.post("/tweats", (req, res) => {
   logger.debug("/tweets invoked...");
   const tweet = req.body;
   if (!tweet) {
@@ -78,6 +78,7 @@ app.post("/tweets", (req, res) => {
     published: tweet.created_at,
     trace_state: req.get("tracestate"),
     trace_parent: req.get("traceparent"),
+    route_header: req.get("kubernetes-route-as"),
     sentiment: 0.5, // default to neutral sentiment
   };
 
