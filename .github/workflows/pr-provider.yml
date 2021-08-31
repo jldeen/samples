@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - demos/demo2/**
+      - twitter-sentiment-processor/demos/demo2/**
 
 env:
   # The name of the resource group to be created. All resources will be place
