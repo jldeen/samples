@@ -6,7 +6,7 @@ metadata:
     app: {{ template "viewer.name" . }}
     release: {{ .Release.Name }}
 spec:
-  replicas: {{ .Values.viewer.replicaCount}}
+  replicas: {{ .Values.replicaCount}}
   selector:
     matchLabels:
       app: {{ template "viewer.name" . }}
@@ -20,18 +20,18 @@ spec:
       annotations:
         dapr.io/enabled: "true"
         dapr.io/app-id: {{ template "viewer.name" . }}
-        dapr.io/app-port: {{ .Values.viewer.port | quote }}
+        dapr.io/app-port: {{ .Values.port | quote }}
         dapr.io/log-as-json: "true"
         dapr.io/config: "tracing"
     spec:
       containers:
       - name: {{ .Chart.Name }}
-        image: {{ .Values.viewer.image }}
+        image: {{ .Values.image }}
         imagePullPolicy: Always
         ports:
-        - containerPort: {{ .Values.viewer.port }}
+        - containerPort: {{ .Values.port }}
         env:
         - name: PORT
-          value: {{ .Values.viewer.port | quote }}
+          value: {{ .Values.port | quote }}
         - name: DAPR_HTTP_PORT
           value: {{ .Values.dapr.port | quote}}

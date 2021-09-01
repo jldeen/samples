@@ -113,21 +113,14 @@ jobs:
         echo "---"
         echo "Chart directory: $CHARTDIR"
         
-        echo "---"
-        echo "Working Directory is: $PWD"
-        
-        echo "___"
-        
-        ls -la
-        
         helm dependency update "$CHARTDIR"
 
         helm upgrade --install twitter-kubecon "$CHARTDIR" \
-          --namespace ${{steps.generate-valid-namespace-name.outputs.result}} --create-namespace \
+          --namespace ${{ steps.generate-valid-namespace-name.outputs.result }} --create-namespace \
           --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
-          --set viewer.ingress.hosts=${{steps.generate-valid-namespace-name.outputs.result}}.viewer.${{ secrets.HOST }} \
-          --set zipkin.ingress.hosts=${{steps.generate-valid-namespace-name.outputs.result}}.zipkin.${{ secrets.HOST }} \
-          --set fullnameOverride=${{steps.generate-valid-namespace-name.outputs.result}} \
+          --set viewer.ingress.hosts=${{ steps.generate-valid-namespace-name.outputs.result }}.viewer.${{ secrets.HOST }} \
+          --set zipkin.ingress.hosts=${{ steps.generate-valid-namespace-name.outputs.result }}.zipkin.${{ secrets.HOST }} \
+          --set fullnameOverride=${{ steps.generate-valid-namespace-name.outputs.result }} \
           --set components.serviceBus.connectionString=${{ steps.azure-deployment.outputs.serviceBusEndpoint }} \
           --set processor.cognitiveService.token=${{ steps.azure-deployment.outputs.cognitiveServiceKey }} \
           --set processor.cognitiveService.endpoint=${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }} \
