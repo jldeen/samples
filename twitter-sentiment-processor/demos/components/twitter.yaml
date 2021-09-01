@@ -8,12 +8,12 @@ spec:
   metadata:
     # PLACE TWITTER CREDENTIALS HERE
   - name: consumerKey
-    value: ""
+    value: "Cu0r5B6pdKzJ8MgjQBgo0vm1v"
   - name: consumerSecret
-    value: ""
+    value: "n95KPOmyR7Kg7z4pdhTFgcU5lGSBwwZ3eKhKnqB8WeDbwC98nd"
   - name: accessToken
-    value: ""
+    value: "23549334-8mAEEmh5RgzeKpZeD1osvflWQjAj5J6TXiYcDjovn"
   - name: accessSecret
-    value: ""
+    value: "7eVF3393JbVOMMpoVxjQ1IwK4PtAucezL0GfSu2R4Hh67"
   - name: query
     value: "microsoft"

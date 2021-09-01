@@ -124,17 +124,17 @@ jobs:
         helm upgrade \
           --install twitter-kubecon "$CHARTDIR" \
           --namespace twitter-kubecon --create-namespace \
-          --set twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
-          --set twitter.consumerSecret=${{ secrets.TWITTER_CONSUMERSECRET }} \
-          --set twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
-          --set twitter.accessSecret=${{ secrets.TWITTER_ACCESSSECRET }} \
           --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
           --set viewer.ingress.hosts={twitter-kubecon.viewer.40.88.250.252.nip.io} \
           --set zipkin.ingress.hosts={twitter-kubecon.zipkin.40.88.250.252.nip.io} \
+          --set components.twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
+          --set components.twitter.consumerSecret=${{ secrets.TWITTER_CONSUMERSECRET }} \
+          --set components.twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
+          --set components.twitter.accessSecret=${{ secrets.TWITTER_ACCESSSECRET }} \
           --set components.serviceBus.connectionString="${{ steps.azure-deployment.outputs.serviceBusEndpoint }}" \
-          --set processor.cognitiveService.endpoint="${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }}" \
           --set components.tableStorage.key="${{ steps.azure-deployment.outputs.storageAccountKey }}" \
           --set components.tableStorage.name="${{ steps.azure-deployment.outputs.storageAccountName }}" \
+          --set processor.cognitiveService.endpoint="${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }}" \
           --set fullnameOverride=provider-pr
       working-directory: ./twitter-sentiment-processor/demos/demo3
 

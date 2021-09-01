@@ -13,4 +13,9 @@ tableStorage:
    name: ""
    key: ""
 
+twitter:
+   consumerKey: ""
+   consumerSecret: ""
+   accessToken: ""
+   accessSecret: ""
    
