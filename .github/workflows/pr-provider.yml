@@ -107,6 +107,12 @@ jobs:
         namespaceName=$(echo ${namespaceName//[!0-9a-zA-Z]/-} | tr '[:upper:]' '[:lower:]' | sed -e 's/^-/z/' -e 's/-$/z/')
         echo ::set-output name=result::$namespaceName
     
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: '3.6.3'
+      id: install
+
     - name: Helm Install PR
       run: |
         CHARTDIR="./charts/"
