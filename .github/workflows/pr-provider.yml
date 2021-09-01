@@ -113,7 +113,9 @@ jobs:
         echo "Chart directory: $CHARTDIR"
 
         helm dependency update "$CHARTDIR"
-
+        
+        echo $PWD
+        
         helm upgrade --install ${{steps.generate-valid-namespace-name.outputs.result}} "$CHARTDIR" \
           --namespace ${{steps.generate-valid-namespace-name.outputs.result}} --create-namespace \
           --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
