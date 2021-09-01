@@ -1,35 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: processor
+  name: {{ template "processor.fullname" . }}
   labels:
-    app: processor
+    app: {{ template "processor.name" . }}
+    release: {{ .Release.Name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas}}
   selector:
     matchLabels:
-      app: processor
+      app: {{ template "processor.name" . }}
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: processor
+        app: {{ template "processor.name" . }}
+        release: {{ .Release.Name }}
         demo: {{ .Values.demoName }}
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "processor"
-        dapr.io/app-port: {{ .Values.processor.port | quote }}
+        dapr.io/app-id: {{ template "processor.name" . }}
+        dapr.io/app-port: {{ .Values.port | quote }}
         dapr.io/log-as-json: "true"
         dapr.io/config: "tracing"
     spec:
       containers:
       - name: processor
-        image: {{ .Values.processor.image }}
+        image: {{ .Values.image }}
         imagePullPolicy: Always
         ports:
-        - containerPort: {{ .Values.processor.port }}
+        - containerPort: {{ .Values.port }}
         env:
         - name: PORT
-          value: {{ .Values.processor.port | quote }}
+          value: {{ .Values.port | quote }}
         - name: DAPR_HTTP_PORT
           value: {{ .Values.dapr.port | quote}}
         - name: CS_ENDPOINT

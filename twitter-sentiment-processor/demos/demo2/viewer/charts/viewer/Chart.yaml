@@ -1,6 +1,6 @@
 apiVersion: v2
-name: demochart
-description: A Helm chart for Kubernetes that deploys a Dapr based Twitter demo.
+name: viewer
+description: A Helm chart for Kubernetes that deploys Viewer API for Twitter Sentiment Demo.
 
 # This is the chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.

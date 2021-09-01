@@ -106,19 +106,25 @@ jobs:
         namespaceName=$(echo ${namespaceName//[!0-9a-zA-Z]/-} | tr '[:upper:]' '[:lower:]' | sed -e 's/^-/z/' -e 's/-$/z/')
         echo ::set-output name=result::$namespaceName
     
-    # - name: Helm Install PR
-    #   run: |
-    #     cd demos/demo3/demochart
-    #     helm dependency update
-    #     helm upgrade \
-    #       --namespace --create-namespace
-    #       --install ${{steps.generate-valid-namespace-name.outputs.result}} . \
-    #       --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
-    #       --set fullnameOverride=${{steps.generate-valid-namespace-name.outputs.result}}
+    - name: Helm Install PR
+      run: |
+        CHARTDIR=demos/demo3/charts
+        helm dependency update $CHARTDIR
+        helm upgrade --install ${{steps.generate-valid-namespace-name.outputs.result}} $CHARTDIR \
+          --namespace ${{steps.generate-valid-namespace-name.outputs.result}} --create-namespace \
+          --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
+          --set viewer.ingress.hosts=${{steps.generate-valid-namespace-name.outputs.result}}.viewer.${{ secrets.HOST }} \
+          --set zipkin.ingress.hosts=${{steps.generate-valid-namespace-name.outputs.result}}.zipkin.${{ secrets.HOST }} \
+          --set fullnameOverride=${{steps.generate-valid-namespace-name.outputs.result}} \
+          --set components.serviceBus.connectionString=${{ steps.azure-deployment.outputs.serviceBusEndpoint }} \
+          --set processor.cognitiveService.token=${{ steps.azure-deployment.outputs.cognitiveServiceKey }} \
+          --set processor.cognitiveService.endpoint=${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }} \
+          --set components.tableStorage.key=${{ steps.azure-deployment.outputs.storageAccountKey }} \
+          --set components.tableStorage.name=${{ steps.azure-deployment.outputs.storageAccountName }}
 
-    # - uses: jldeen/dev-spaces/actions/add-review-url@Releases/v2
-    #   with:
-    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
-    #     host: "${{ secrets.HOST }}"
-    #     branch-name: ${{steps.generate-valid-namespace-name.outputs.result}}
-    #     protocol: "http"
+    - uses: jldeen/dev-spaces/actions/add-review-url@Releases/v2
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        host: "${{ secrets.HOST }}"
+        branch-name: ${{steps.generate-valid-namespace-name.outputs.result}}
+        protocol: "http"
