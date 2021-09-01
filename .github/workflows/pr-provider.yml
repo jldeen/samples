@@ -121,9 +121,9 @@ jobs:
         
         helm dependency update "$CHARTDIR"
 
-        helm upgrade --install twitter-kubecon "$CHARTDIR" \
+        helm upgrade \
+          --install twitter-kubecon "$CHARTDIR" \
           --namespace twitter-kubecon --create-namespace \
-          --set fullnameOverride=provider-pr \
           --set twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
           --set twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
           --set twitter.accessSecret=${{ secrets.TWITTER_ACCESSSECRET }} \
@@ -135,7 +135,8 @@ jobs:
           --set processor.cognitiveService.token=${{ steps.azure-deployment.outputs.cognitiveServiceKey }} \
           --set processor.cognitiveService.endpoint=${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }} \
           --set components.tableStorage.key=${{ steps.azure-deployment.outputs.storageAccountKey }} \
-          --set components.tableStorage.name=${{ steps.azure-deployment.outputs.storageAccountName }}
+          --set components.tableStorage.name=${{ steps.azure-deployment.outputs.storageAccountName }} \
+          --set fullnameOverride=provider-pr
       working-directory: ./twitter-sentiment-processor/demos/demo3
 
     - uses: jldeen/dev-spaces/actions/add-review-url@Releases/v2
