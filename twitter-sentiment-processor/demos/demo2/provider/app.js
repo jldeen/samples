@@ -63,7 +63,7 @@ var saveContent = function (obj) {
 // tweets handler
 app.post("/tweets", (req, res) => {
   logger.debug("/tweets invoked...");
-  const tweet = re.body;
+  const tweet = req.body;
   if (!tweet) {
     res.status(400).send({ error: "invalid content" });
     return;
