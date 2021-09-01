@@ -4,14 +4,14 @@ dependencies:
     repository: "file://../../components/charts/components"
   - name: viewer
     version: 0.1.0
-    repository: "file://../../Demo2/viewer/charts/viewer"
+    repository: "file://../../demo2/viewer/charts/viewer"
   - name: zipkin
     version: 0.1.0
-    repository: "file://../../Demo2/zipkin/charts/zipkin"
+    repository: "file://../../demo2/zipkin/charts/zipkin"
   - name: provider
     version: 0.1.0
-    repository: "file://../../Demo2/provider/charts/provider"
+    repository: "file://../../demo2/provider/charts/provider"
   - name: processor
     version: 0.1.0
-    repository: "file://../../Demo2/processor/charts/processor"
+    repository: "file://../../demo2/processor/charts/processor"
   
