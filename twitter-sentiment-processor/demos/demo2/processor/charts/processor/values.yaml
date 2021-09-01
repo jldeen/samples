@@ -1,0 +1,29 @@
+# Default values for demochart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+demoName: "twitterSentimentProcessor"
+
+fullnameOverride: processor
+
+dapr:
+   port: 3500
+
+replicas: 1
+port: 3002
+image: "darquewarrior/processor:1.0.0"
+
+cognitiveService:
+  endpoint: ""
+
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  path: /
+#   hosts:
+#     - chart-example.local
+  tls: []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local
+   

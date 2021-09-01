@@ -1,0 +1,26 @@
+viewer:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: traefik 
+    hosts:
+      - dev.viewer.<REPLACE_ME_WITH_HOST_SUFFIX>  # Assumes deployment to the 'dev' namespace
+
+zipkin:
+  ingress:
+    annotations:
+      kubernetes.io/ingress.class: traefik 
+    hosts:
+      - dev.zipkin.<REPLACE_ME_WITH_HOST_SUFFIX>  # Assumes deployment to the 'dev' namespace
+
+processor:
+  cognitiveService:
+    endpoint: <REPLACE_WITH_COGNITIVE_SERVICE_ENDPOINT>
+    token: <REPLACE_WITH_COGNITIVE_SERVICE_TOKEN>
+
+components:
+  serviceBus:
+    connectionString: <REPLACE_WITH_SERVICEBUS_CONNECTIONSTRING>
+  tableStorage:
+    name: <REPLACE_WITH_TABLE_STORAGE_NAME>
+    key: <REPLACE_WITH_TABLE_STORAGE_KEY>
+

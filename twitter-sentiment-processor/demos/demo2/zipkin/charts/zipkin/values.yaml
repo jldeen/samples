@@ -1,0 +1,24 @@
+# Default values for demochart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+demoName: "twitterSentimentProcessor"
+
+fullnameOverride: zipkin
+
+dapr:
+   port: 3500
+
+replicas: 1
+externalPort: 80
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  path: /
+  hosts:
+  - dev.zipkin.<REPLACE_ME_WITH_HOST_SUFFIX>
+  tls: []
+    # - secretName: chart-example-tls
+    #   hosts:
+    #     - chart-example.local

@@ -1,28 +1,31 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: viewer
+  name: {{ template "viewer.fullname" . }}
   labels:
-    app: viewer
+    app: {{ template "viewer.name" . }}
+    release: {{ .Release.Name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.viewer.replicaCount}}
   selector:
     matchLabels:
-      app: viewer
+      app: {{ template "viewer.name" . }}
+      release: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: viewer
+        app: {{ template "viewer.name" . }}
+        release: {{ .Release.Name }}
         demo: {{ .Values.demoName }}
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "viewer"
+        dapr.io/app-id: {{ template "viewer.name" . }}
         dapr.io/app-port: {{ .Values.viewer.port | quote }}
         dapr.io/log-as-json: "true"
         dapr.io/config: "tracing"
     spec:
       containers:
-      - name: viewer
+      - name: {{ .Chart.Name }}
         image: {{ .Values.viewer.image }}
         imagePullPolicy: Always
         ports:
@@ -32,16 +35,3 @@ spec:
           value: {{ .Values.viewer.port | quote }}
         - name: DAPR_HTTP_PORT
           value: {{ .Values.dapr.port | quote}}
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: viewer
-spec:
-  ports:
-  - port:  {{ .Values.viewer.externalPort }}
-    protocol: TCP
-    targetPort: {{ .Values.viewer.port }}
-  selector:
-    app: viewer
-  type: LoadBalancer
