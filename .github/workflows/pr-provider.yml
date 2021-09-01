@@ -108,7 +108,7 @@ jobs:
     
     - name: Helm Install PR
       run: |
-        CHARTDIR=demos/demo3/charts
+        CHARTDIR=./charts
         helm dependency update $CHARTDIR
         helm upgrade --install ${{steps.generate-valid-namespace-name.outputs.result}} $CHARTDIR \
           --namespace ${{steps.generate-valid-namespace-name.outputs.result}} --create-namespace \
@@ -121,6 +121,7 @@ jobs:
           --set processor.cognitiveService.endpoint=${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }} \
           --set components.tableStorage.key=${{ steps.azure-deployment.outputs.storageAccountKey }} \
           --set components.tableStorage.name=${{ steps.azure-deployment.outputs.storageAccountName }}
+      working-directory: ./twitter-sentiment-processor/demos/demo3
 
     - uses: jldeen/dev-spaces/actions/add-review-url@Releases/v2
       with:
