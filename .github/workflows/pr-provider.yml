@@ -123,6 +123,7 @@ jobs:
 
         helm upgrade --install twitter-kubecon "$CHARTDIR" \
           --namespace twitter-kubecon --create-namespace \
+          --set fullnameOverride=provider-pr \
           --set twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
           --set twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
           --set twitter.accessSecret=${{ secrets.TWITTER_ACCESSSECRET }} \
@@ -130,7 +131,6 @@ jobs:
           --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
           --set viewer.ingress.hosts={twitter-kubecon.viewer.40.88.250.252.nip.io} \
           --set zipkin.ingress.hosts={twitter-kubecon.zipkin.40.88.250.252.nip.io} \
-          --set fullnameOverride=twitter-kubecon \
           --set components.serviceBus.connectionString=${{ steps.azure-deployment.outputs.serviceBusEndpoint }} \
           --set processor.cognitiveService.token=${{ steps.azure-deployment.outputs.cognitiveServiceKey }} \
           --set processor.cognitiveService.endpoint=${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }} \
