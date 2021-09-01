@@ -125,6 +125,7 @@ jobs:
           --install twitter-kubecon "$CHARTDIR" \
           --namespace twitter-kubecon --create-namespace \
           --set twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
+          --set twitter.consumerSecret=${{ secrets.TWITTER_CONSUMERSECRET }} \
           --set twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
           --set twitter.accessSecret=${{ secrets.TWITTER_ACCESSSECRET }} \
           --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
@@ -141,7 +142,7 @@ jobs:
       with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}  
           branch-name: ${{steps.generate-valid-namespace-name.outputs.result}}
-          host: "viewer.${{ secrets.HOST }}" ## FIX HOST with viewer prefix - see if we can not hard code ingress.hosts
+          host: "viewer.${{ secrets.HOST }}" ## TODO see if we can not hard code ingress.hosts
           protocol: "http"
 
 # TODO FIX ZIPKIN CHART / Deployment
