@@ -1,5 +1,5 @@
 {{- if .Values.ingress.enabled -}}
-{{- $servicePort := .Values.viewer.externalPort -}}
+{{- $servicePort := .Values.externalPort -}}
 {{- $ingressPath := .Values.ingress.path -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress

@@ -5,8 +5,8 @@ metadata:
 spec:
   type: LoadBalancer
   ports:
-    - port: {{ .Values.viewer.externalPort }}
-      targetPort: {{ .Values.viewer.port }}
+    - port: {{ .Values.externalPort }}
+      targetPort: {{ .Values.port }}
       protocol: TCP
       name: http
   selector:

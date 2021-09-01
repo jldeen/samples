@@ -8,14 +8,11 @@ fullnameOverride: viewer
 dapr:
    port: 3500
 
-viewer:
-   replicaCount: 1
-   port: 8083
-   externalPort: 80
-   image: "darquewarrior/viewer:1.0.0"
 
-zipkin:
-   externalPort: 80
+replicaCount: 1
+port: 8083
+externalPort: 80
+image: "darquewarrior/viewer:1.0.0"
 
 ingress:
   enabled: true
