@@ -137,7 +137,7 @@ jobs:
           --set fullnameOverride=provider-pr
       working-directory: ./twitter-sentiment-processor/demos/demo3
 
-    - uses: microsoft/mindaro/actions/add-review-url@Releases/v2              
+    - uses: microsoft/mindaro/actions/add-review-url@Releases/v1              
       with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}  
           branch-name: ${{steps.generate-valid-namespace-name.outputs.result}}
