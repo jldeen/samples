@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - twitter-sentiment-processor/demos/demo2/**
+  workflow_dispatch:
 
 env:
   # The name of the resource group to be created. All resources will be place
