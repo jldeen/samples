@@ -61,7 +61,7 @@ var saveContent = function (obj) {
 };
 
 // tweets handler
-app.post("/tweets", (req, res) => {
+app.post("/tweats", (req, res) => {
   logger.debug("/tweets invoked...");
   const tweet = req.body;
   if (!tweet) {
@@ -69,7 +69,6 @@ app.post("/tweets", (req, res) => {
     return;
   }
 
-  
   let obj = {
     id: tweet.id_str,
     author: tweet.user.screen_name,
