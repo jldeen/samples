@@ -111,10 +111,11 @@ jobs:
         CHARTDIR="./charts/"
         echo "---"
         echo "Chart directory: $CHARTDIR"
-
-        helm dependency update "$CHARTDIR"
         
-        echo $PWD
+        echo "---"
+        echo "Working Directory is: $PWD"
+        
+        helm dependency update "$CHARTDIR"
 
         helm upgrade --install ${{steps.generate-valid-namespace-name.outputs.result}} "$CHARTDIR" \
           --namespace ${{steps.generate-valid-namespace-name.outputs.result}} --create-namespace \
