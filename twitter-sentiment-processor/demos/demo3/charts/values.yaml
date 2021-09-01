@@ -3,14 +3,14 @@ viewer:
     annotations:
       kubernetes.io/ingress.class: traefik 
     hosts:
-      - dev.viewer.<REPLACE_ME_WITH_HOST_SUFFIX>  # Assumes deployment to the 'dev' namespace
+      - twitter-kubecon.viewer.40.88.250.252.nip.io # Assumes deployment to the 'dev' namespace
 
 zipkin:
   ingress:
     annotations:
       kubernetes.io/ingress.class: traefik 
     hosts:
-      - dev.zipkin.<REPLACE_ME_WITH_HOST_SUFFIX>  # Assumes deployment to the 'dev' namespace
+      - twitter-kubecon.zipkin.40.88.250.252.nip.io  # Assumes deployment to the 'dev' namespace
 
 processor:
   cognitiveService:
