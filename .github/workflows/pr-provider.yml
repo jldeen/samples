@@ -141,5 +141,7 @@ jobs:
       with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}  
           branch-name: ${{steps.generate-valid-namespace-name.outputs.result}}
-          host: "${{ secrets.HOST }}"
+          host: "viewer.${{ secrets.HOST }}" ## FIX HOST with viewer prefix - see if we can not hard code ingress.hosts
           protocol: "http"
+
+# TODO FIX ZIPKIN CHART / Deployment
