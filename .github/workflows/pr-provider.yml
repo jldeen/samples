@@ -108,9 +108,13 @@ jobs:
     
     - name: Helm Install PR
       run: |
-        CHARTDIR=./charts
-        helm dependency update $CHARTDIR
-        helm upgrade --install ${{steps.generate-valid-namespace-name.outputs.result}} $CHARTDIR \
+        CHARTDIR="./charts/"
+        echo "---"
+        echo "Chart directory: $CHARTDIR"
+
+        helm dependency update "$CHARTDIR"
+
+        helm upgrade --install ${{steps.generate-valid-namespace-name.outputs.result}} "$CHARTDIR" \
           --namespace ${{steps.generate-valid-namespace-name.outputs.result}} --create-namespace \
           --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
           --set viewer.ingress.hosts=${{steps.generate-valid-namespace-name.outputs.result}}.viewer.${{ secrets.HOST }} \
