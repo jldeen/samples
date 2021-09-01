@@ -134,7 +134,7 @@ jobs:
           --set components.serviceBus.connectionString="${{ steps.azure-deployment.outputs.serviceBusEndpoint }}" \
           --set components.tableStorage.key="${{ steps.azure-deployment.outputs.storageAccountKey }}" \
           --set components.tableStorage.name="${{ steps.azure-deployment.outputs.storageAccountName }}" \
-          --set components.tracing.zipkin.endpointAddress="http://zipkin.twitter-kubecon.svc.cluster.local:9411/api/v2/spans"
+          --set components.tracing.zipkin.endpointAddress="http://zipkin.twitter-kubecon.svc.cluster.local:9411/api/v2/spans" \
           --set processor.cognitiveService.endpoint="${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }}" \
           --set fullnameOverride=provider-pr
       working-directory: ./twitter-sentiment-processor/demos/demo3
