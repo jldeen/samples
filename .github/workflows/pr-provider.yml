@@ -121,8 +121,8 @@ jobs:
         ls -la
         
         helm dependency update "$CHARTDIR"
-        
-        helm upgrade --install ${{steps.generate-valid-namespace-name.outputs.result}} "$CHARTDIR" \
+
+        helm upgrade --install twitter-kubecon "$CHARTDIR" \
           --namespace ${{steps.generate-valid-namespace-name.outputs.result}} --create-namespace \
           --set provider.image=${{ secrets.CONTAINER_REGISTRY }}/provider:${{ github.run_number }} \
           --set viewer.ingress.hosts=${{steps.generate-valid-namespace-name.outputs.result}}.viewer.${{ secrets.HOST }} \
