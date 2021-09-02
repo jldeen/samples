@@ -128,6 +128,7 @@ jobs:
           --set viewer.image=${{ secrets.CONTAINER_REGISTRY }}/viewer:1.0.0 \
           --set viewer.ingress.hosts={twitter-kubecon.viewer.40.88.250.252.nip.io} \
           --set zipkin.ingress.hosts={twitter-kubecon.zipkin.40.88.250.252.nip.io} \
+          --set processor.cognitiveService.token=${{ steps.azure-deployment.outputs.cognitiveServiceKey }} \
           --set components.twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
           --set components.twitter.consumerSecret=${{ secrets.TWITTER_CONSUMERSECRET }} \
           --set components.twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
