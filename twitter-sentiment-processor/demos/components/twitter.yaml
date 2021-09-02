@@ -8,12 +8,13 @@ spec:
   metadata:
     # PLACE TWITTER CREDENTIALS HERE
   - name: consumerKey
-    value: "Cu0r5B6pdKzJ8MgjQBgo0vm1v"
+    value: {{ .Values.twitter.consumerKey }}
   - name: consumerSecret
-    value: "n95KPOmyR7Kg7z4pdhTFgcU5lGSBwwZ3eKhKnqB8WeDbwC98nd"
+    value: {{ .Values.twitter.consumerSecret }}
   - name: accessToken
-    value: "23549334-8mAEEmh5RgzeKpZeD1osvflWQjAj5J6TXiYcDjovn"
+    value: {{ .Values.twitter.accessToken }}
   - name: accessSecret
-    value: "7eVF3393JbVOMMpoVxjQ1IwK4PtAucezL0GfSu2R4Hh67"
+    value: {{ .Values.twitter.accessSecret }}
   - name: query
     value: "microsoft"
+    
