@@ -15,6 +15,4 @@ demos/demo1/producer/obj/project.nuget.cache
 demos/demo1/producer/obj/Debug/netcoreapp3.1/Producer.csprojAssemblyReference.cache
 demos/demo3/auth.json
 
-demos/demochart-old
 demos/components/twitter.yaml
-demos/charts/components/templates/twitter.yaml

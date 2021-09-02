@@ -34,7 +34,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ $fullName }}
+                name: {{ $fullName }}-public
                 port:
                   number: {{ $servicePort }}
   {{- end }}

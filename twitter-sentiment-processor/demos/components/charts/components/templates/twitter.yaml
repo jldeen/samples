@@ -8,20 +8,12 @@ spec:
   metadata:
     # PLACE TWITTER CREDENTIALS HERE
   - name: consumerKey
-    secretKeyRef:
-      name: demo-twitter-secret
-      key:  consumerKey
+    value: {{ .Values.twitter.consumerKey }}
   - name: consumerSecret
-    secretKeyRef:
-      name: demo-twitter-secret
-      key:  consumerSecret
+    value: {{ .Values.twitter.consumerSecret }}
   - name: accessToken
-    secretKeyRef:
-      name: demo-twitter-secret
-      key:  accessToken
+    value: {{ .Values.twitter.accessToken }}
   - name: accessSecret
-    secretKeyRef:
-      name: demo-twitter-secret
-      key:  accessSecret
+    value: {{ .Values.twitter.accessSecret }}
   - name: query
     value: "microsoft"

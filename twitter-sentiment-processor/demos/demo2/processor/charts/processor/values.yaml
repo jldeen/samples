@@ -14,6 +14,7 @@ image: "darquewarrior/processor:1.0.0"
 
 cognitiveService:
   endpoint: ""
+  token: ""
 
 ingress:
   enabled: false

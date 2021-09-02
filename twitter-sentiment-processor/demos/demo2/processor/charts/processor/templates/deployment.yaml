@@ -19,10 +19,10 @@ spec:
         demo: {{ .Values.demoName }}
       annotations:
         dapr.io/enabled: "true"
+        dapr.io/config: "tracing"
         dapr.io/app-id: {{ template "processor.name" . }}
         dapr.io/app-port: {{ .Values.port | quote }}
         dapr.io/log-as-json: "true"
-        dapr.io/config: "tracing"
     spec:
       containers:
       - name: processor
@@ -35,6 +35,10 @@ spec:
           value: {{ .Values.port | quote }}
         - name: DAPR_HTTP_PORT
           value: {{ .Values.dapr.port | quote}}
+        - name: SECRET_STORE
+          value: "kubernetes"
+        - name: SECRET_KEY
+          value: "demo-processor-secret"
         - name: CS_ENDPOINT
           value: {{ .Values.cognitiveService.endpoint | quote }}
         - name: CS_TOKEN

@@ -2,6 +2,7 @@ apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
   name: tweet-pubsub
+  namespace: {{ .Release.Namespace }}
 spec:
   type: pubsub.azure.servicebus
   version: v1

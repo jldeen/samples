@@ -60,8 +60,7 @@ window.onload = function () {
                 "' />" + t.author +
                 "<a href='https://twitter.com/" + t.author + "/status/" + t.id +
                 "' target='_blank'><img src='static/img/tw.svg' class='tweet-link' /></a></b>" +
-                "<br /><i>" + t.content + "</i><br /><i class='small'>Query: " +
-                t.query + "</i></div>";
+                "<br /><i>" + t.content + "</i></div>";
             item.innerHTML = tmsg
             appendLog(item);
         };
