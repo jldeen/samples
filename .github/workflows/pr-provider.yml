@@ -145,5 +145,5 @@ jobs:
       with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}  
           branch-name: ${{steps.generate-valid-namespace-name.outputs.result}}
-          host: "viewer.${{ secrets.HOST }}" ## TODO see if we can not hard code ingress.hosts
+          host: "viewer.${{ secrets.HOST }}"
           protocol: "http"
