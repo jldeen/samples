@@ -52,7 +52,7 @@ jobs:
 
         az k8s-extension create --cluster-type managedClusters \
           --cluster-name ${{ steps.azure-deployment.outputs.aksName }} \
-          --resource-group ${{ .env.RG_NAME }}\
+          --resource-group ${{ .env.RG_NAME }} \
           --name daprK8s\
           --extension-type Microsoft.Dapr \
           --auto-upgrade-minor-version false \
