@@ -56,5 +56,5 @@ jobs:
           --name daprK8s\
           --extension-type Microsoft.Dapr \
           --auto-upgrade-minor-version false \
-          --version $daprVersion \
+          --version ${{ env.DAPR_VERSION }} \
           --only-show-errors
