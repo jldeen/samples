@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - "main"
-    paths:
-      - twitter-sentiment-processor/demos/demo3/**
   workflow_dispatch:
 
 env:
@@ -50,6 +48,8 @@ jobs:
   
     - name: Install Dapr via AKS Extension
       run: |
+        az extension add --name k8s-extension
+
         az k8s-extension create --cluster-type managedClusters \
           --cluster-name $aksName \
           --resource-group $rgName \
