@@ -51,7 +51,7 @@ jobs:
         az extension add --name k8s-extension
 
         az k8s-extension create --cluster-type managedClusters \
-          --cluster-name $aksName \
+          --cluster-name ${{ steps.azure-deployment.outputs.aksName }} \
           --resource-group $rgName \
           --name daprK8s\
           --extension-type Microsoft.Dapr \
