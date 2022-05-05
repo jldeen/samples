@@ -65,22 +65,22 @@ jobs:
         version: '3.8.2'
       id: install
 
-    - name: Install Keda
-      run: |
-        helm repo add kedacore https://kedacore.github.io/charts
-
-        helm repo update
-
-        helm install keda kedacore/keda --namespace keda --create-namespace
-
     - name: Get Dev K8s Context
       uses: azure/aks-set-context@v1
       with:
         creds: "${{ secrets.AZURE_CREDENTIALS }}"
         cluster-name: ${{ steps.azure-deployment.outputs.aksName }}
         resource-group: ${{ env.RG_NAME }}
+
+    - name: Install Keda via Helm
+      run: |
+        helm repo add kedacore https://kedacore.github.io/charts
+
+        helm repo update
+
+        helm install keda kedacore/keda --namespace keda --create-namespace
     
-    - name: Helm Install
+    - name: Deploy Twitter Sentiment via Helm
       run: |
         CHARTDIR="./charts/"
         echo "---"
