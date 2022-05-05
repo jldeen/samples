@@ -9,7 +9,7 @@ on:
 env:
   RG_NAME: "twitterKubeCon"
   LOCATION: "eastus"
-  DAPR_VERSION: "1.7.2"
+  DAPR_VERSION: "1.6.0"
   K8S_VERSION: "1.23.5"
 
 jobs:
