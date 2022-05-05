@@ -58,3 +58,42 @@ jobs:
           --auto-upgrade-minor-version false \
           --version ${{ env.DAPR_VERSION }} \
           --only-show-errors
+
+    - name: Get Dev K8s Context
+      uses: azure/aks-set-context@v1
+      with:
+        creds: "${{ secrets.AZURE_CREDENTIALS }}"
+        cluster-name: ${{ steps.azure-deployment.outputs.aksName }}
+        resource-group: ${{ env.RG_NAME }}
+    
+    - name: Setup Helm
+      uses: azure/setup-helm@v1
+      with:
+        version: '3.8.2'
+      id: install
+    
+    - name: Prep Helm Chart Components
+      run: cp -f ../components/twitter.yaml ./demochart/templates/
+      working-directory: ./twitter-sentiment-processor/demos/demo3
+    
+    - name: Helm Install
+      run: |
+        CHARTDIR="./charts/"
+        echo "---"
+        echo "Chart directory: $CHARTDIR"
+        
+        helm dependency update "$CHARTDIR"
+
+        helm upgrade \
+          --install twitter-kubecon "$CHARTDIR" \
+          --namespace twitter-kubecon --create-namespace \
+          --set components.serviceBus.connectionString="${{ steps.azure-deployment.outputs.serviceBusEndpoint }}" \
+          --set processor.cognitiveService.token=${{ steps.azure-deployment.outputs.cognitiveServiceKey }} \
+          --set processor.cognitiveService.endpoint="${{ steps.azure-deployment.outputs.cognitiveServiceEndpoint }}" \
+          --set components.tableStorage.key="${{ steps.azure-deployment.outputs.storageAccountKey }}" \
+          --set components.tableStorage.name="${{ steps.azure-deployment.outputs.storageAccountName }}" \
+          --set components.twitter.consumerKey=${{ secrets.TWITTER_CONSUMERKEY }} \
+          --set components.twitter.consumerSecret=${{ secrets.TWITTER_CONSUMERSECRET }} \
+          --set components.twitter.accessToken=${{ secrets.TWITTER_ACCESSTOKEN }} \
+          --set components.twitter.accessSecret=${{ secrets.TWITTER_ACCESSSECRET }}
+      working-directory: ./twitter-sentiment-processor/demos/demo3
