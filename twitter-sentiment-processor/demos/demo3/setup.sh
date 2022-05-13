@@ -86,7 +86,15 @@ cognitiveServiceEndpoint=$(getOutput 'cognitiveServiceEndpoint')
 az aks get-credentials --resource-group $rgName --name "$aksName"
 
 # Initialize Dapr
-dapr init --kubernetes --runtime-version $daprVersion
+az k8s-extension create --cluster-type managedClusters \
+--cluster-name $aksName \
+--resource-group $rgName \
+--name daprK8s\
+--extension-type Microsoft.Dapr \
+--auto-upgrade-minor-version false \
+--version $daprVersion
+
+# dapr init --kubernetes --runtime-version $daprVersion
 
 # Confirm Dapr is running. If you run helm install to soon the Dapr side car
 # will not be injected.
